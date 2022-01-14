@@ -1,42 +1,54 @@
 :- use_module(library(clpfd)).
 :- [files].
 
-%definir fill_strimko
-fill_strimko(S, [X,Y,Z]) :- nth1(X,S,Lx), nth1(Y,Lx,Cy), Cy=Z.
-
 %partition dividir lista em 2
 %length(X,10).
 
-%converter para int!!
-read1(Lines) :- read_lines('input.txt', Lines), converter(Lines).
+%ler o ficheiro input.txt
+read1(Lines) :- read_lines('input.txt', Lines).
 
-converter(L,R) :- accCp(L,R).
+%converter array de strings em ints
+converter0(L,R) :- accCp(L,R).
 accCp([],[]).
 accCp([H|T1],[H1|T2]) :- atom_number(H, H1), accCp(T1,T2).
 
-read2(Lines1) :- read1(Y), converter(Y), read2(Y).
-%read1(Lines), append(X, Y, Lines), length(X, 2).
+%converter array de arrays de string em ints
+converter(L,R) :- accC(L,R).
+accC([],[]).
+accC([H|T1],[H1|T2]) :- converter0(H, H1), accC(T1,T2).
 
+%converter o input
+converterInput(Y):- read1(L), converter(L, Y).
+
+%preencher o tabuleiro S com os dados do array
+fill_strimko(S, [X,Y,Z]) :- nth1(X,S,Lx), nth1(Y,Lx,Cy), Cy=Z.
+
+%aplicar fill_strimko ao tabuleiro a partir de um array de ints
 dosomething([], _).
 dosomething([H|T], X) :- fill_strimko(X, H), dosomething(T, X).
 
-% [[2, 2, 3], [2, 3, 2], [3, 3, 1]]
+%aplicar fill_strimko ao tabuleiro partir de input.txt
+dosomething1(Z, X) :- converterInput(Z),  dosomething(Z, X).
 
 /*
-dosomething([[2, 2, 3], [2, 3, 2], [3, 3, 1]], [[P11,P12,P13,P14],
+dosomething1(X, [[P11,P12,P13,P14],
 [P21,P22,P23,P24],
 [P31,P32,P33,P34],
 [P41,P42,P43,P44]]).
 */
 
-%input teste
-teste :-
+% !!! tentar aplicar dosomething1 no go !!!
+
+%read1(Lines), append(X, Y, Lines), length(X, 2). <--- predicado prof
+
+/*input teste
 go( [[_, _, _, _],
 [_, 3, 2, _],
 [_, _, 1, _],
 [_, _, _, _]] ).
+*/
 
-%
+%acrescentar descrição
 diff(L) :- L ins 1..4, all_distinct(L).
 
 %execução
