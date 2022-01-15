@@ -1,9 +1,6 @@
 :- use_module(library(clpfd)).
 :- [files].
 
-%partition dividir lista em 2
-%length(X,10).
-
 %ler o ficheiro input.txt
 read1(Lines) :- read_lines('input.txt', Lines).
 
@@ -30,29 +27,24 @@ dosomething([H|T], X) :- fill_strimko(X, H), dosomething(T, X).
 %aplicar fill_strimko ao tabuleiro partir de input.txt
 dosomething1(Z, X) :- converterInput(Z),  dosomething(Z, X).
 
-/*
-dosomething1(X, [[P11,P12,P13,P14],
-[P21,P22,P23,P24],
-[P31,P32,P33,P34],
-[P41,P42,P43,P44]]).
-*/
+%ler apenas os valores das posições pré-preenchidas do tabuleiro
+readValores(Y) :- converterInput(Lines), append(X, Y, Lines), length(X, 5).
 
-% !!! tentar aplicar dosomething1 no go !!!
+%prencheer o tabuleiro de acordo com o input
+dosomething2(Z, X) :- readValores(Z),  dosomething(Z, X).
 
-%read1(Lines), append(X, Y, Lines), length(X, 2). <--- predicado prof
+%execução do strimko
+go(Y) :- dosomething2(_, Y), goaux(Y).
 
-/*input teste
-go( [[_, _, _, _],
-[_, 3, 2, _],
-[_, _, 1, _],
-[_, _, _, _]] ).
-*/
+%ler apenas os valores das streams do tabuleiro
+readSaux(X) :- converterInput(Lines), append(X, _, Lines), length(X, 5).
+readStreams(Y) :- readSaux(L), append(_, Y, L), length(Y, 4).
 
-%acrescentar descrição
-diff(L) :- L ins 1..4, all_distinct(L).
+%fazer com que os valores V dentro de cada array sejam diferentes
+diff(V) :- V ins 1..4, all_distinct(V).
 
 %execução
-go( [[P11,P12,P13,P14],
+goaux( [[P11,P12,P13,P14],
 [P21,P22,P23,P24],
 [P31,P32,P33,P34],
 [P41,P42,P43,P44]] ) :-
