@@ -20,15 +20,12 @@ converterInput(Y):- read1(L), converter(L, Y).
 %preencher o tabuleiro S com os dados do array
 fill_strimko(S, [X,Y,Z]) :- nth1(X,S,Lx), nth1(Y,Lx,Cy), Cy=Z.
 
+%ler apenas os valores das posições pré-preenchidas do tabuleiro
+readValores(Y) :- converterInput(Lines), append(X, Y, Lines), length(X, 5).
+
 %aplicar fill_strimko ao tabuleiro a partir de um array de ints
 dosomething([], _).
 dosomething([H|T], X) :- fill_strimko(X, H), dosomething(T, X).
-
-%aplicar fill_strimko ao tabuleiro partir de input.txt
-dosomething1(Z, X) :- converterInput(Z),  dosomething(Z, X).
-
-%ler apenas os valores das posições pré-preenchidas do tabuleiro
-readValores(Y) :- converterInput(Lines), append(X, Y, Lines), length(X, 5).
 
 %prencheer o tabuleiro de acordo com o input
 dosomething2(Z, X) :- readValores(Z),  dosomething(Z, X).
